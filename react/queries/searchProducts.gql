@@ -1,0 +1,18 @@
+query productSearch($productName: String, $categoryId: String) {
+  productSearch(
+    fullText: $productName
+    selectedFacets: [{ key: "category-3", value: $categoryId }]
+    fuzzy: "auto"
+    hideUnavailableItems: true
+    operator: or
+    from: 0
+    to: 15
+  ) {
+    products {
+      productId
+      description
+      productName
+      productReference
+    }
+  }
+}

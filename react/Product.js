@@ -194,8 +194,8 @@ function StructuredData({ product, selectedItem }) {
 
   const searchTerm = route?.canonicalPath
     ?.substring(1)
-    .split('/')[0]
-    .replace(/-/g, ' ')
+    ?.split('/')[0]
+    ?.replace(/-/g, ' ')
 
   const catID = productContextValue?.product?.categoryId
 

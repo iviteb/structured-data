@@ -5,9 +5,14 @@ import PropTypes from 'prop-types'
 // eslint-disable-next-line no-restricted-imports
 import { pathOr, path, sort, last, flatten } from 'ramda'
 import { jsonLdScriptProps } from 'react-schemaorg'
+import { useQuery } from 'react-apollo'
 
 import useAppSettings from './hooks/useAppSettings'
 import { getBaseUrl } from './modules/baseUrl'
+import { useProduct } from 'vtex.product-context'
+import searchProducts from '../react/queries/searchProducts.gql'
+import { canUseDOM } from 'vtex.render-runtime'
+
 
 const getSpotPrice = path(['commertialOffer', 'spotPrice'])
 const getPrice = path(['commertialOffer', 'Price'])
@@ -17,9 +22,9 @@ const getAvailableQuantity = pathOr(0, ['commertialOffer', 'AvailableQuantity'])
 const getFinalPrice = (value, getPriceFunc, { decimals, pricesWithTax }) => {
   return pricesWithTax
     ? Math.round(
-        (getPriceFunc(value) + getTax(value) + Number.EPSILON) * 10 ** decimals
-      ) /
-        10 ** decimals
+      (getPriceFunc(value) + getTax(value) + Number.EPSILON) * 10 ** decimals
+    ) /
+    10 ** decimals
     : getPriceFunc(value)
 }
 
@@ -148,6 +153,7 @@ export const parseToJsonLD = ({
   currency,
   decimals,
   pricesWithTax,
+  isSimilarTo
 }) => {
   const [image] = selectedItem ? selectedItem.images : []
   const { brand } = product
@@ -176,12 +182,38 @@ export const parseToJsonLD = ({
     sku: selectedItem && selectedItem.itemId,
     category: getCategoryName(product),
     offers,
+    isSimilarTo
   }
 
   return productLD
 }
 
 function StructuredData({ product, selectedItem }) {
+  const productContextValue = useProduct()
+  const { route } = useRuntime()
+
+  const searchTerm = route?.canonicalPath
+    ?.substring(1)
+    ?.split('/')[0]
+    ?.replace(/-/g, ' ')
+
+  const catID = productContextValue?.product?.categoryId
+
+  const { data } = useQuery(searchProducts, {
+    variables: {
+      productName: searchTerm,
+      categoryId: catID,
+    },
+    ssr: true,
+  })
+
+  const isSimilarTo = data?.productSearch?.products.map((prod) => {
+    return {
+      '@type': 'Product',
+      name: prod.productName
+    }
+  })
+
   const {
     culture: { currency },
   } = useRuntime()
@@ -194,6 +226,7 @@ function StructuredData({ product, selectedItem }) {
     currency,
     decimals,
     pricesWithTax,
+    isSimilarTo
   })
 
   return <script {...jsonLdScriptProps(productLD)} />

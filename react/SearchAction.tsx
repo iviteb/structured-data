@@ -15,7 +15,7 @@ function SearchAction({ searchTermPath }: Props) {
   const path = !searchTermPath ? '/' : searchTermPath
   const { binding } = useRuntime()
 
-  const roBinding = !!binding?.canonicalBaseAddress?.includes("www.floria.ro")
+  const roBinding = binding?.canonicalBaseAddress?.includes("www.floria.ro")
 
   return (
     <Helmet

@@ -20,12 +20,21 @@ export const getProductBreadcrumb = (
 
   const baseUrl = getBaseUrl()
 
-  const categoryItems: ListItem[] = categoryTree.map((category, index) => ({
+  const categoryItems: ListItem[] = [{
     '@type': 'ListItem',
-    position: index + 1,
+    position: 1,
+    name: 'Homepage',
+    item: baseUrl,
+  }]
+
+  const categories: ListItem[] = categoryTree.map((category, index) => ({
+    '@type': 'ListItem',
+    position: index + 2,
     name: category.name,
     item: baseUrl + category.href,
   }))
+
+  categoryItems.push(...categories)
 
   if (productName && productSlug) {
     categoryItems.push({

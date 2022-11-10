@@ -17,10 +17,15 @@ const getSearchBreadcrumb = (breadcrumb?: SearchBreadcrumbItem[]) => {
 
   const baseUrl = getBaseUrl()
 
+  const breadcrumbList: SearchBreadcrumbItem[] = [{
+    href: '',
+    name: 'Homepage',
+  }, ...breadcrumb]
+
   return helmetJsonLdProp<BreadcrumbList>({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: breadcrumb.map((item, index) => ({
+    itemListElement: breadcrumbList.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,

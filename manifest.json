@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "vtex.render-runtime": "8.x",
-    "vtex.apps-graphql": "3.x"
+    "vtex.apps-graphql": "3.x",
+    "vtex.product-context": "0.x"
   },
   "settingsSchema": {
     "title": "Structured data",

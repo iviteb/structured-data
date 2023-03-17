@@ -21,13 +21,15 @@
     "@types/ramda": "^0.26.5",
     "@types/react": "^16.9.31",
     "@types/react-helmet": "^5.0.9",
-    "@vtex/test-tools": "^3.1.0",
+    "@vtex/test-tools": "^3.3.2",
     "@vtex/tsconfig": "^0.4.4",
     "apollo-cache-inmemory": "^1.6.5",
     "graphql": "^14.6.0",
     "schema-dts": "^0.8.2",
-    "typescript": "3.9.7",
-    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.132.3/public/@types/vtex.render-runtime",
+    "typescript": "3.9.7"
+  },
+  "resolutions": {
+    "@types/jest": "26.0.15"
   },
   "version": "0.10.0"
 }

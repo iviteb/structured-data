@@ -11,8 +11,6 @@ import useAppSettings from './hooks/useAppSettings'
 import { getBaseUrl } from './modules/baseUrl'
 import { useProduct } from 'vtex.product-context'
 import searchProducts from '../react/queries/searchProducts.gql'
-import { canUseDOM } from 'vtex.render-runtime'
-
 
 const getSpotPrice = path(['commertialOffer', 'spotPrice'])
 const getPrice = path(['commertialOffer', 'Price'])
@@ -22,9 +20,9 @@ const getAvailableQuantity = pathOr(0, ['commertialOffer', 'AvailableQuantity'])
 const getFinalPrice = (value, getPriceFunc, { decimals, pricesWithTax }) => {
   return pricesWithTax
     ? Math.round(
-      (getPriceFunc(value) + getTax(value) + Number.EPSILON) * 10 ** decimals
-    ) /
-    10 ** decimals
+        (getPriceFunc(value) + getTax(value) + Number.EPSILON) * 10 ** decimals
+      ) /
+        10 ** decimals
     : getPriceFunc(value)
 }
 
@@ -153,7 +151,7 @@ export const parseToJsonLD = ({
   currency,
   decimals,
   pricesWithTax,
-  isSimilarTo
+  isSimilarTo,
 }) => {
   const [image] = selectedItem ? selectedItem.images : []
   const { brand } = product
@@ -182,7 +180,7 @@ export const parseToJsonLD = ({
     sku: selectedItem && selectedItem.itemId,
     category: getCategoryName(product),
     offers,
-    isSimilarTo
+    isSimilarTo,
   }
 
   return productLD
@@ -210,7 +208,7 @@ function StructuredData({ product, selectedItem }) {
   const isSimilarTo = data?.productSearch?.products.map((prod) => {
     return {
       '@type': 'Product',
-      name: prod.productName
+      name: prod.productName,
     }
   })
 
@@ -226,7 +224,7 @@ function StructuredData({ product, selectedItem }) {
     currency,
     decimals,
     pricesWithTax,
-    isSimilarTo
+    isSimilarTo,
   })
 
   return <script {...jsonLdScriptProps(productLD)} />
